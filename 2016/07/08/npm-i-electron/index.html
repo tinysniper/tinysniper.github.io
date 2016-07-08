@@ -4,10 +4,14 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>npm-i-electron | tinysniper</title>
+    <title>npm安装electron-prebuilt | tinysniper</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="tinysniper">
+    
+    <meta name="description" content="系统环境OS X Yosemite
+缘起看到electron，感觉挺新奇的，想尝试一下，于是拿electronic-wechat做下测试。npm这些工具都安装正常，按照操作步骤执行npm install，结果在下载electron-prebuilt时挂着一直下载不了。
+electron安装问题之前已">
     
     
     
@@ -63,7 +67,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/07/08/npm-i-electron/" title="npm-i-electron" itemprop="url">npm-i-electron</a>
+      <a href="/2016/07/08/npm-i-electron/" title="npm安装electron-prebuilt" itemprop="url">npm安装electron-prebuilt</a>
   </h1>
   <p class="article-author">By
     
@@ -71,7 +75,7 @@
     </p>
   <p class="article-time">
     <time datetime="2016-07-08T07:38:54.000Z" itemprop="datePublished">2016-07-08</time>
-    Updated:<time datetime="2016-07-08T07:38:54.000Z" itemprop="dateModified">2016-07-08</time>
+    Updated:<time datetime="2016-07-08T09:48:20.000Z" itemprop="dateModified">2016-07-08</time>
     
   </p>
 </header>
@@ -80,10 +84,38 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
-		
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#系统环境"><span class="toc-number">1.</span> <span class="toc-text">系统环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#缘起"><span class="toc-number">2.</span> <span class="toc-text">缘起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#electron安装问题"><span class="toc-number">3.</span> <span class="toc-text">electron安装问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#尝试的解决办法"><span class="toc-number">4.</span> <span class="toc-text">尝试的解决办法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最终解决办法"><span class="toc-number">5.</span> <span class="toc-text">最终解决办法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nrm"><span class="toc-number">6.</span> <span class="toc-text">nrm</span></a></li></ol>
 		</div>
 		
-		  
+		<h2 id="系统环境"><a href="#系统环境" class="headerlink" title="系统环境"></a>系统环境</h2><p>OS X Yosemite</p>
+<h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>看到electron，感觉挺新奇的，想尝试一下，于是拿<a href="https://github.com/geeeeeeeeek/electronic-wechat" target="_blank" rel="external">electronic-wechat</a>做下测试。<br>npm这些工具都安装正常，按照操作步骤执行<code>npm install</code>，结果在下载<code>electron-prebuil</code>t时挂着一直下载不了。</p>
+<h2 id="electron安装问题"><a href="#electron安装问题" class="headerlink" title="electron安装问题"></a>electron安装问题</h2><p>之前已经安装了<code>Electron.app</code>，但编译时使用的是命令行的<code>electron</code>工具，所以在<code>npm install</code>时又对<code>electron-prebuilt</code>进行下载。<br>然而下载速度一直是0，刚开始以为是网络问题，后来查询发现下载不了是墙内的普遍现象。</p>
+<h2 id="尝试的解决办法"><a href="#尝试的解决办法" class="headerlink" title="尝试的解决办法"></a>尝试的解决办法</h2><p>既然是因为安装包源访问的限制，我们可以尝试用墙内可访问的地址。查询到有如下两个地址：</p>
+<blockquote>
+<p><a href="https://registry.npm.taobao.org" target="_blank" rel="external">https://registry.npm.taobao.org</a><br><a href="http://cnpmjs.org" target="_blank" rel="external">http://cnpmjs.org</a></p>
+</blockquote>
+<p>使用新安装源的方法：</p>
+<ol>
+<li><p>修改.npmrc文件<br>修改~/.npmrc，把地址替换为上面的任意一个：</p>
+<blockquote>
+<p>registry=<a href="https://registry.npm.taobao.org" target="_blank" rel="external">https://registry.npm.taobao.org</a></p>
+</blockquote>
+</li>
+<li><p>npm命令</p>
+<blockquote>
+<p>npm config set registry <a href="https://registry.npm.taobao.org" target="_blank" rel="external">https://registry.npm.taobao.org</a></p>
+</blockquote>
+</li>
+</ol>
+<p>理论上，上述两种方法对安装源的设定都是可以的，执行<code>npm install</code>应该成功。但现实很残酷，还是无法安装<code>electron-prebuilt</code>！<br>折腾了N久，也尝试重启了电脑，还是无法安装。(＞﹏＜)</p>
+<h2 id="最终解决办法"><a href="#最终解决办法" class="headerlink" title="最终解决办法"></a>最终解决办法</h2><p>也算功夫不负有心人。今天又在查找答案，发现如果使用国内安装源，应该使用<code>cnpm</code>，而不是<code>npm</code>。于是安装<code>cnpm</code>：</p>
+<blockquote>
+<p>npm install -g cnpm</p>
+</blockquote>
+<p>然后再执行<code>npm install</code>，速度刷刷的，安装成功。</p>
+<h2 id="nrm"><a href="#nrm" class="headerlink" title="nrm"></a>nrm</h2><p>nrm是npm的开源包，就是为了解决npm安装源的问题，<code>npm install -g nrm</code>安装后，可以很方便的查看国内可用的安装源，也可以使用该命令切换不同的安装源。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">$ nrm ls</div><div class="line"></div><div class="line"> npm ---- https://registry.npmjs.org/</div><div class="line"> cnpm --- http://r.cnpmjs.org/</div><div class="line">* taobao - https://registry.npm.taobao.org/</div><div class="line"> nj ----- https://registry.nodejitsu.com/</div><div class="line"> rednpm - http://registry.mirror.cqupt.edu.cn/</div><div class="line"> npmMirror  https://skimdb.npmjs.com/registry/</div><div class="line"> edunpm - http://registry.enpmjs.org/</div><div class="line"></div><div class="line"></div><div class="line">yan at YuyuPro <span class="keyword">in</span> ~/Documents/yan/github/electronic-wechat on master [!]</div><div class="line">$ nrm use taobao</div><div class="line"></div><div class="line"></div><div class="line">  Registry has been set to: https://registry.npm.taobao.org/</div></pre></td></tr></table></figure>
+  
 	</div>
 		<footer class="article-footer clearfix">
 
@@ -92,7 +124,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://yoursite.com/2016/07/08/npm-i-electron/" data-title="npm-i-electron | tinysniper" data-tsina="null" class="share clearfix">
+  <div data-url="http://yoursite.com/2016/07/08/npm-i-electron/" data-title="npm安装electron-prebuilt | tinysniper" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -118,7 +150,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
-  
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#系统环境"><span class="toc-number">1.</span> <span class="toc-text">系统环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#缘起"><span class="toc-number">2.</span> <span class="toc-text">缘起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#electron安装问题"><span class="toc-number">3.</span> <span class="toc-text">electron安装问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#尝试的解决办法"><span class="toc-number">4.</span> <span class="toc-text">尝试的解决办法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最终解决办法"><span class="toc-number">5.</span> <span class="toc-text">最终解决办法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nrm"><span class="toc-number">6.</span> <span class="toc-text">nrm</span></a></li></ol>
   </div>
 
 <div id="asidepart">
