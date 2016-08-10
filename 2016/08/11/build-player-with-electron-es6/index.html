@@ -1,0 +1,484 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>使用Electron, React &amp; ES6构建音乐流媒体播放应用 | tinysniper</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
+    
+    <meta name="author" content="tinysniper">
+    
+    <meta name="description" content="本文转载自：众成翻译译者：译想天开链接：http://www.zcfy.cc/article/977原文：https://www.sitepoint.com/music-streaming-app-electron-react-es6/
+
+本文由Mark Brown, Dan Prince  和 B">
+    
+    
+    
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/pacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/pacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      <div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.svg" alt="tinysniper" title="tinysniper"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="tinysniper">tinysniper</a></h1>
+				<h2 class="blog-motto"></h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+					<li>
+					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="text" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/08/11/build-player-with-electron-es6/" title="使用Electron, React &amp; ES6构建音乐流媒体播放应用" itemprop="url">使用Electron, React &amp; ES6构建音乐流媒体播放应用</a>
+  </h1>
+  <p class="article-author">By
+    
+      <a href="http://yoursite.com" title="tinysniper">tinysniper</a>
+    </p>
+  <p class="article-time">
+    <time datetime="2016-08-10T22:50:40.000Z" itemprop="datePublished">2016-08-11</time>
+    Updated:<time datetime="2016-08-10T22:50:40.000Z" itemprop="dateModified">2016-08-11</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#关于作者更多的信息可参考"><span class="toc-number">1.</span> <span class="toc-text">关于作者更多的信息可参考</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#纵览我们构建的应用"><span class="toc-number"></span> <span class="toc-text">纵览我们构建的应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加Electron和其它依赖"><span class="toc-number"></span> <span class="toc-text">添加Electron和其它依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#工程结构"><span class="toc-number"></span> <span class="toc-text">工程结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构建应用"><span class="toc-number"></span> <span class="toc-text">构建应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#音轨组件"><span class="toc-number">1.</span> <span class="toc-text">音轨组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ProgressSoundPlayer组件"><span class="toc-number">2.</span> <span class="toc-text">ProgressSoundPlayer组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Main主程序"><span class="toc-number">3.</span> <span class="toc-text">Main主程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#布局应用"><span class="toc-number">4.</span> <span class="toc-text">布局应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引文件"><span class="toc-number">5.</span> <span class="toc-text">索引文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译应用"><span class="toc-number"></span> <span class="toc-text">编译应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行和打包应用"><span class="toc-number"></span> <span class="toc-text">运行和打包应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接下来要干什么"><span class="toc-number"></span> <span class="toc-text">接下来要干什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结尾"><span class="toc-number"></span> <span class="toc-text">结尾</span></a>
+		</div>
+		
+		<blockquote>
+<p>本文转载自：<a href="http://www.zcfy.cc" target="_blank" rel="external">众成翻译</a><br>译者：<a href="http://www.zcfy.cc/@topeye" target="_blank" rel="external">译想天开</a><br>链接：<a href="http://www.zcfy.cc/article/977" target="_blank" rel="external">http://www.zcfy.cc/article/977</a><br>原文：<a href="https://www.sitepoint.com/music-streaming-app-electron-react-es6/" target="_blank" rel="external">https://www.sitepoint.com/music-streaming-app-electron-react-es6/</a></p>
+</blockquote>
+<p><em>本文由<a href="https://www.sitepoint.com/author/mbrown" target="_blank" rel="external">Mark Brown</a>, <a href="https://www.sitepoint.com/author/dprince" target="_blank" rel="external">Dan Prince</a>  和 <a href="https://www.sitepoint.com/author/bmota/" target="_blank" rel="external">Bruno Mota</a>审阅. 感谢所有SitePoint的审稿人, 他们成就了贡献最好内容的SitePoint!</em></p>
+<h3 id="关于作者更多的信息可参考"><a href="#关于作者更多的信息可参考" class="headerlink" title="关于作者更多的信息可参考"></a>关于作者更多的信息可参考</h3><ul>
+<li><a href="https://www.sitepoint.com/horizon-a-scalable-backend-perfect-for-javascript-mobile-apps/?utm_source=sitepoint&amp;utm_medium=relatedinline&amp;utm_term=javascript&amp;utm_campaign=relatedauthor" target="_blank" rel="external">Horizon: 一个完美构建JavaScript移动应用的可扩展后端工具</a></li>
+<li><a href="https://www.sitepoint.com/realtime-app-development-with-rethinkdb-and-react-native/?utm_source=sitepoint&amp;utm_medium=relatedinline&amp;utm_term=javascript&amp;utm_campaign=relatedauthor" target="_blank" rel="external">使用RethinkDB和React原生接口开发实时应用</a></li>
+</ul>
+<p>Electron, 一个Github公司发布的开发架构, 可以让我们利用web开发技能构建顺畅时尚的跨平台应用. 本教程中, 我将演示如何通过强大的Electron工具，配合React, ES6和Soundcloud API，来创建一个时尚的音乐流应用, 将你喜欢的音乐频道运行在你的桌面运行. 同时我也会演示如何打包和分发应用, 创建指定操作系统的便携应用.</p>
+<p>本教程需要有基本的React知识. 如果在开始前想学习相关的入门知识, 可以参考我们的页面<a href="http://www.sitepoint.com/getting-started-react/" target="_blank" rel="external">教程入门知识</a>. 本教程的代码在我们的github主页<a href="https://github.com/sitepoint-editors/electron-soundcloudplayer/" target="_blank" rel="external">GitHub库</a>.</p>
+<h2 id="纵览我们构建的应用"><a href="#纵览我们构建的应用" class="headerlink" title="纵览我们构建的应用"></a>纵览我们构建的应用</h2><p>这是我们将要开发的应用界面:</p>
+<p><img src="http://p0.qhimg.com/t0122a70e4c730cbf44.png" alt="Soundcloud player"></p>
+<p>我们将使用React创建UI, 通过SoundCloud接口获得音轨, Electron则可以让应用运行在基于浏览器的环境中. 就像你看到的, 应用会有一个搜索框，通过它可以搜索到可以播放的音乐，搜索结果以音频播放器常见的形式列出. 这和你在SoundCloud网页上看到的界面非常类似。.</p>
+<p>如果你想继续往下进行，确保你有SoundCloud的帐号，以及一个 <a href="http://soundcloud.com/you/apps/new" target="_blank" rel="external">SoundCloud应用</a>. 把API的键值记录下来，因为后面我们会用到.</p>
+<h2 id="添加Electron和其它依赖"><a href="#添加Electron和其它依赖" class="headerlink" title="添加Electron和其它依赖"></a>添加Electron和其它依赖</h2><p>首先，把github的代码 <a href="https://github.com/atom/electron-quick-start" target="_blank" rel="external">Electron Quick Start repo on Github</a> 克隆到本地文件夹<code>soundcloud-player</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`git clone https://github.com/atom/electron-quick-start soundcloud-player`</div></pre></td></tr></table></figure>
+<p>进入该目录, 打开文件 <code>package.json</code> ，添加如下依赖关系:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&quot;devDependencies&quot;: &#123;</div><div class="line">  &quot;electron-prebuilt&quot;: &quot;^1.2.0&quot;,</div><div class="line">  &quot;babel-preset-es2015&quot;: &quot;^6.9.0&quot;,</div><div class="line">  &quot;babel-preset-react&quot;: &quot;^6.5.0&quot;,</div><div class="line">  &quot;babelify&quot;: &quot;^7.3.0&quot;,</div><div class="line">  &quot;browserify&quot;: &quot;^13.0.1&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如下是每个依赖包的简要描述:</p>
+<ul>
+<li><p><a href="https://www.npmjs.com/package/electron-prebuilt" target="_blank" rel="external">electron-prebuilt</a> —命令行使用的Electron prebuilt工具.</p>
+</li>
+<li><p><a href="https://www.npmjs.com/package/babel-preset-es2015" target="_blank" rel="external">babel-preset-es2015</a>—将ES6代码转换为ES5代码(后者可以运行在所有现代浏览器上).</p>
+</li>
+<li><p><a href="https://www.npmjs.com/package/babel-preset-react" target="_blank" rel="external">babel-preset-react</a>—将JSX代码转换为JavaScript.</p>
+</li>
+<li><p><a href="https://www.npmjs.com/package/babelify" target="_blank" rel="external">babelify</a>—Browserify的Babel转换器.</p>
+</li>
+<li><p><a href="https://www.npmjs.com/package/browserify" target="_blank" rel="external">browserify</a>—builds a bundle you can serve up to the browser in a single `` tag.</p>
+</li>
+</ul>
+<p>接着添加 <code>dependencies</code> 的相关内容:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&quot;dependencies&quot;: &#123;</div><div class="line">  &quot;node-soundcloud&quot;: &quot;0.0.5&quot;,</div><div class="line">  &quot;react&quot;: &quot;^0.14.8&quot;,</div><div class="line">  &quot;react-dom&quot;: &quot;^0.14.8&quot;,</div><div class="line">  &quot;react-loading&quot;: &quot;0.0.9&quot;,</div><div class="line">  &quot;react-soundplayer&quot;: &quot;^0.3.6&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如下是每个包的简要描述:</p>
+<ul>
+<li><p><a href="https://www.npmjs.com/package/node-soundcloud" target="_blank" rel="external">node-soundcloud</a>—可以调用SoundCloud的API.</p>
+</li>
+<li><p><a href="https://www.npmjs.com/package/react" target="_blank" rel="external">react</a>—React库，可以创建UI组件.</p>
+</li>
+<li><p><a href="https://www.npmjs.com/package/react-dom" target="_blank" rel="external">react-dom</a>—调整React组件为DOM格式.</p>
+</li>
+<li><p><a href="https://www.npmjs.com/package/react-loading" target="_blank" rel="external">react-loading</a>—用于应用的加载状态显示.</p>
+</li>
+<li><p><a href="https://www.npmjs.com/package/react-soundplayer" target="_blank" rel="external">react-soundplayer</a>—一个React组件, 允许我们很容易的为SoundCloud创建定制音频播放器.</p>
+</li>
+</ul>
+<p>现在你已经添加 <code>dependencies</code> 和 <code>devDependencies</code>, 接着执行 <code>npm install</code> 进行安装.</p>
+<p>最后, 为应用的编译和启动添加脚本. 这样，输入 <code>npm run compile</code> 就可以编译， 输入<code>npm start</code> 则启动应用.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&quot;scripts&quot;: &#123;</div><div class="line">  &quot;compile&quot;: &quot;browserify -t [ babelify --presets [ react es2015 ] ] src/app.js -o js/app.js&quot;,</div><div class="line">  &quot;start&quot;: &quot;electron main.js&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>同时，我们可以替换掉electron自动生成的信息，替换成我们自己的.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;name&quot;: &quot;electron-soundcloud-player&quot;,</div><div class="line">  &quot;version&quot;: &quot;1.0.0&quot;,</div><div class="line">  &quot;description&quot;: &quot;Plays music from SoundCloud&quot;,</div><div class="line">  &quot;main&quot;: &quot;main.js&quot;,</div><div class="line">  &quot;scripts&quot;: &#123;</div><div class="line">    &quot;start&quot;: &quot;electron main.js&quot;,</div><div class="line">    &quot;compile&quot;: &quot;browserify -t [ babelify --presets [ react es2015 ] ] src/app.js -o js/app.js&quot;</div><div class="line">  &#125;,</div><div class="line">  &quot;author&quot;: &quot;Wern Ancheta&quot;,</div><div class="line">  ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>总之，现在你的 <code>package.json</code> 文件 <a href="https://github.com/sitepoint-editors/electron-soundcloudplayer/blob/master/package.json" target="_blank" rel="external">类似这样</a>.</p>
+<h2 id="工程结构"><a href="#工程结构" class="headerlink" title="工程结构"></a>工程结构</h2><p>我们工程的结构如下所示:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">.</div><div class="line">├── css</div><div class="line">│   └── style.css</div><div class="line">├── index.html</div><div class="line">├── js</div><div class="line">├── main.js</div><div class="line">├── package.json</div><div class="line">├── README.md</div><div class="line">└── src</div><div class="line">    ├── app.js</div><div class="line">    └── components</div><div class="line">        ├── ProgressSoundPlayer.js</div><div class="line">        └── Track.js</div></pre></td></tr></table></figure>
+<p>我们来创建缺少的文件夹:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`mkdir -p css js src/components`</div></pre></td></tr></table></figure>
+<p>以及目录包含的必要的文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`touch css/style.css src/app.js src/components/ProgressSoundPlayer.js src/components/Track.js`</div></pre></td></tr></table></figure>
+<p>文件夹 <code>js</code>  将存放我们应用的JavaScript编译文件，<code>css</code> 目录是应用的布局，以及<code>src</code> 目录存放应用的各个组件.</p>
+<p>有些文件是从Electron项目自动快速生成的，我们并不需要可以删除:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`rm renderer.js LICENSE.md`</div></pre></td></tr></table></figure>
+<p>我们保留<code>main.js</code> h和<code>ìndex.html</code>. 这两个文件中，<code>main.js</code> 用于创建应用运行的浏览器窗口. 但是，有些地方我们还是需要做些改动. 首先调整第13行的宽度设置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`mainWindow = new BrowserWindow(&#123;width: 1000, height: 600&#125;)`</div></pre></td></tr></table></figure>
+<p>接着，删除第19行的如下代码 (否则我们应用会显示dev工具我们并不需要):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`mainWindow.webContents.openDevTools()`</div></pre></td></tr></table></figure>
+<p><code>main.js</code>创建新的浏览器窗口时会调用<code>index.html</code> (本文后面会介绍). 从这点看，应用将以浏览器窗口同样的方式运行.</p>
+<h2 id="构建应用"><a href="#构建应用" class="headerlink" title="构建应用"></a>构建应用</h2><h3 id="音轨组件"><a href="#音轨组件" class="headerlink" title="音轨组件"></a>音轨组件</h3><p>接下来我们为音频播放器创建<code>Track</code>组件(参见<a href="https://github.com/sitepoint-editors/electron-soundcloudplayer/blob/master/src/components/Track.js" target="_blank" rel="external">src/components/Track.js</a>).</p>
+<p>首先我们需要React和一些React SoundPlayer提供的组件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import React, &#123;Component&#125; from &apos;react&apos;;</div><div class="line">import &#123; PlayButton, Progress, Timer &#125; from &apos;react-soundplayer/components&apos;;</div></pre></td></tr></table></figure>
+<p>注意使用这种语法我们需要从React中提取出<code>Component</code>类. 就像名字所表示的, <code>Component</code>用来创建新组件.</p>
+<p>接着我们创建新组件<code>Track</code>, 并添加一个<code>render</code>方法. 注意我们导出了这个类，这样其它文件就可以直接引用.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">export default class Track extends Component &#123;</div><div class="line">  render() &#123;</div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>render</code>方法中, 我们通过入参<code>props</code>提取当前音频轨道的信息, 然后把他们赋值给他们的内部变量, 参见<a href="https://www.sitepoint.com/preparing-ecmascript-6-destructuring-assignment/" target="_blank" rel="external">析构分配</a>. 这样我们就可以使用<code>track</code>来替代<code>this.props.track</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`const &#123; track, soundCloudAudio, playing, seeking, currentTime, duration &#125; = this.props;`</div></pre></td></tr></table></figure>
+<p>我们可以计算出轨道的当前进度:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`const currentProgress = this.props.currentTime / this.props.duration * 100 || 0;`</div></pre></td></tr></table></figure>
+<p>然后返回给UI组件.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">return (</div><div class="line">  &lt;div className=&quot;player&quot;&gt;</div><div class="line">    &lt;PlayButton</div><div class="line">      className=&quot;orange-button&quot;</div><div class="line">      soundCloudAudio=&#123;soundCloudAudio&#125;</div><div class="line">      playing=&#123;playing&#125;</div><div class="line">      seeking=&#123;seeking&#125; /&gt;</div><div class="line">    &lt;Timer</div><div class="line">      duration=&#123;duration&#125;</div><div class="line">      className=&quot;timer&quot;</div><div class="line">      soundCloudAudio=&#123;soundCloudAudio&#125;</div><div class="line">      currentTime=&#123;currentTime&#125; /&gt;</div><div class="line">    &lt;div className=&quot;track-info&quot;&gt;</div><div class="line">      &lt;h2 className=&quot;track-title&quot;&gt;&#123;track &amp;&amp; track.title&#125;&lt;/h2&gt;</div><div class="line">      &lt;h3 className=&quot;track-user&quot;&gt;&#123;track &amp;&amp; track.user &amp;&amp; track.user.username&#125;&lt;/h3&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">    &lt;Progress</div><div class="line">      className=&quot;progress-container&quot;</div><div class="line">      innerClassName=&quot;progress&quot;</div><div class="line">      soundCloudAudio=&#123;soundCloudAudio&#125;</div><div class="line">      value=&#123;currentProgress&#125; /&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">);</div></pre></td></tr></table></figure>
+<p>从上面代码你可以看到，我们拥有了一个非常标准的音频播放器. 它有一个播放按钮, 一个计时器(用来显示当前播放时间或持续时间), 能显示出上传歌曲者的标题和用户名信息, 最后还有一个进度条.</p>
+<p>这里是 <a href="https://github.com/sitepoint-editors/electron-soundcloudplayer/blob/master/src/components/Track.js" target="_blank" rel="external">完整的组件</a>.</p>
+<h3 id="ProgressSoundPlayer组件"><a href="#ProgressSoundPlayer组件" class="headerlink" title="ProgressSoundPlayer组件"></a>ProgressSoundPlayer组件</h3><p>接下来我们关注ProgressSoundPlayer组件(<a href="https://github.com/sitepoint-editors/electron-soundcloudplayer/blob/master/src/components/ProgressSoundPlayer.js" target="_blank" rel="external">src/components/ProgressSoundPlayer.js</a>). 这将为上面创建的<code>Track</code>创建包装器.</p>
+<p>除了<code>Track</code>组件, 我们需要导入<code>SoundPlayerContainer</code>组件. <code>SoundPlayerContainer</code>是更高层级的容器, 它将构建音频播放器需要的属性传递给子类.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">import React, &#123;Component, PropTypes&#125; from &apos;react&apos;;</div><div class="line">import &#123; SoundPlayerContainer &#125; from &apos;react-soundplayer/addons&apos;;</div><div class="line">import Track from &apos;./Track&apos;;</div></pre></td></tr></table></figure>
+<p>接下来, 我们创建<code>ProgressSoundPlayer</code>组件. 这些都是为包装<code>Track</code>组件的<code>SoundPlayerContainer</code>所做的. 注意, 我们并不需要给<code>Track</code>组件传递任何参数, 因为<code>SoundPlayerContainer</code>会自动的在后台做这些事情. 我们需要做的, 是把<code>resolveUrl</code>和 <code>clientId</code>作为属性传递给<code>SoundPlayerContainer</code>.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">export default class ProgressSoundPlayer extends Component &#123;</div><div class="line">  render() &#123;</div><div class="line">    const &#123;resolveUrl, clientId&#125; = this.props;</div><div class="line">    return (</div><div class="line">      &lt;SoundPlayerContainer resolveUrl=&#123;resolveUrl&#125; clientId=&#123;clientId&#125;&gt;</div><div class="line">        &lt;Track /&gt;</div><div class="line">      &lt;/SoundPlayerContainer&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后，我们设置该组件需要的props属性. 这里需要设置<code>resolveUrl</code> 和 <code>clientId</code>，后面组件转换时会用到.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">ProgressSoundPlayer.propTypes = &#123;</div><div class="line">  resolveUrl: PropTypes.string.isRequired,</div><div class="line">  clientId: PropTypes.string.isRequired</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>这里指定<code>propTypes</code>是一种<a href="https://facebook.github.io/react/docs/reusable-components.html#prop-validation" target="_blank" rel="external">极佳的实践方法</a>. 如果组件必须的参数没有传入，就会在dev工具控制台里面触发一个告警. 注意我们不需要提前在<code>Track</code> 组件里面处理，因为<code>SoundPlayerContainer</code>才负责所有必须的props属性的检查.</p>
+<p>这里是<a href="https://github.com/sitepoint-editors/electron-soundcloudplayer/blob/master/src/components/ProgressSoundPlayer.js" target="_blank" rel="external">完整的组件</a>.</p>
+<h3 id="Main主程序"><a href="#Main主程序" class="headerlink" title="Main主程序"></a>Main主程序</h3><p>主文件是<a href="https://github.com/sitepoint-editors/electron-soundcloudplayer/blob/master/src/app.js" target="_blank" rel="external">src/app.js</a>. 它负责呈现应用的完整UI—保护搜索框，以及音频播放器.</p>
+<p>该文件的代码分解如下，我们首先要导入需要的所有库. 每个库我们都在前面依赖区域提到过(当然除了我们自己创建的<code>ProgressSoundPlayer</code>库).</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">import React, &#123;Component&#125; from &apos;react&apos;;</div><div class="line">import ReactDOM from &apos;react-dom&apos;;</div><div class="line">import ProgressSoundPlayer from &apos;./components/ProgressSoundPlayer&apos;;</div><div class="line">import SC from &apos;node-soundcloud&apos;;</div><div class="line">import Loading from &apos;react-loading&apos;;</div></pre></td></tr></table></figure>
+<p>添加你的SoundCloud客户端ID:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`var client_id = &apos;YOUR SOUNDCLOUD APP ID&apos;;`</div></pre></td></tr></table></figure>
+<p>注意，你可以使用像<a href="https://github.com/motdotla/dotenv" target="_blank" rel="external">dotenv</a>这样的环境变量加载工具，这部分内容你其实可以不用同步到你的代码库.</p>
+<p>通过包含SoundCloud客户端ID的类初始化node-soundcloud库.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">SC.init(&#123;</div><div class="line">  id: client_id</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>创建 <code>Main</code> 组件类:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">class Main extends Component &#123;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在类里，需要定义构造函数. 这就允许我们添加自己的初始化代码. 在<code>constructor</code> 函数中，我们调用<code>super()</code>时就会调用<code>Component</code>类的构造函数，以及其中所有的初始化代码.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">constructor(props)&#123;</div><div class="line">  super();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接下来，我们设置应用默认的状态:</p>
+<ul>
+<li><p><code>query</code> 是默认的搜索.</p>
+</li>
+<li><p><code>hasResults</code> 用来记录组件是否通过API返回了结果.</p>
+</li>
+<li><p><code>searchResults</code> 存放当前的搜索结果.</p>
+</li>
+<li><p><code>isLoading</code> 用于记录应用在通过API获取结果时是否有结果显示. 当它是<code>true</code>时, 界面上的下拉列表就会出现显示相应结果.</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">this.state = &#123;</div><div class="line">  query: &apos;&apos;,</div><div class="line">  hasResults: false,</div><div class="line">  searchResults: [],</div><div class="line">  isLoading: false</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>接下来是<code>handleTextChange</code>函数. 他用用更新搜索结果，在用户敲击回车键时调用<code>search</code>函数. 该函数在搜索框的<code>onKeyUp</code>事件被触发时被调用.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">handleTextChange(event)&#123;</div><div class="line">  this.setState(&#123;</div><div class="line">    query: event.target.value</div><div class="line">  &#125;);</div><div class="line">  if(event.key === &apos;Enter&apos;)&#123;</div><div class="line">    this.search.call(this);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接着介绍<code>search</code>函数, 它主要发送查询请求给SoundCloud API，同时处理查询结果. 首先设置<code>isLoading</code>状态为<code>true</code>，这样下拉列表就出现了. 接着，产生<code>GET</code>请求通过SoundCloud API发送到<code>tracks</code> 端 . 终端接收到查询请求并将其作为必须参数, 但我们还需要传入另外一个<code>embeddable_by</code> 来指定具体的需求，我们只需要获取任何人已经嵌入好的音乐. 一旦查询有返回, 我们就开始检查是否有错误, 然后更新搜索结果的<code>状态</code>. 这时候，相应功能组件需要重新调整来呈现搜索结果.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">search()&#123;</div><div class="line">  this.setState(&#123;</div><div class="line">    isLoading: true</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  SC.get(&apos;/tracks&apos;, &#123;</div><div class="line">    q: this.state.query,</div><div class="line">    embeddable_by: &apos;all&apos;</div><div class="line">  &#125;, (err, tracks) =&gt; &#123;</div><div class="line">    if(!err)&#123;</div><div class="line">      this.setState(&#123;</div><div class="line">        hasResults: true,</div><div class="line">        searchResults: tracks,</div><div class="line">        isLoading: false</div><div class="line">      &#125;);</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>render</code>函数对UI进行适配调整. 界面部分包含一个搜索框，可以输入歌曲名称或者艺术家名字，还有一个提交搜索的按钮. 它还包含几个根据条件结果不同进行调整的功能，如<code>Loading</code>功能(这仅在<code>isLoading</code>为真时才显示)如搜索结果(当<code>hasResults</code>为真而<code>isLoading</code>为假时显示).</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">render()&#123;</div><div class="line">  return (</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;h1&gt;Electron SoundCloud Player&lt;/h1&gt;</div><div class="line">      &lt;input type=&quot;search&quot;</div><div class="line">             onKeyUp=&#123;this.handleTextChange.bind(this)&#125;</div><div class="line">             className=&quot;search-field&quot;</div><div class="line">             placeholder=&quot;Enter song name or artist...&quot; /&gt;</div><div class="line">      &lt;button className=&quot;search-button&quot;</div><div class="line">              onClick=&#123;this.search.bind(this)&#125;&gt;Search&lt;/button&gt;</div><div class="line">      &lt;div className=&quot;center&quot;&gt;</div><div class="line">        &#123;this.state.isLoading &amp;&amp; &lt;Loading type=&quot;bars&quot; color=&quot;#FFB935&quot; /&gt;&#125;</div><div class="line">      &lt;/div&gt;</div><div class="line">      &#123;this.state.hasResults &amp;&amp; !this.state.isLoading ?</div><div class="line">       this.renderSearchResults.call(this) :</div><div class="line">       this.renderNoSearchResults.call(this)&#125;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意我们在<code>handleTextChange</code>中使用了<code>bind()</code>方法, 在<code>renderSearchResults</code>和<code>renderNoSearchResults</code>中调用了<code>call()</code>. 这是因为React中的函数在使用ES6类语法时不能自动的绑定. 当然, 你也可以选择使用像<a href="https://github.com/developit/decko" target="_blank" rel="external">decko</a>来自动进行绑定. 例如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">import &#123; bind &#125; from &apos;decko&apos;;</div><div class="line"></div><div class="line">// ...</div><div class="line"></div><div class="line">@bind</div><div class="line">handleTextChange(event)&#123;</div><div class="line">  this.setState(&#123;</div><div class="line">    query: event.target.value</div><div class="line">  &#125;);</div><div class="line">  if(event.key == &apos;Enter&apos;)&#123;</div><div class="line">    this.search();</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接着，我们要考虑没有任何搜索结果的情况，如下函数做对应的处理.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">renderNoSearchResults()&#123;</div><div class="line">  return (</div><div class="line">    &lt;div id=&quot;no-results&quot;&gt;&lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如下函数用于显示搜索结果. 它会在<code>searchResults</code>中调用<code>map</code>方法来遍历搜索结果，并执行<code>renderPlayer</code>函数.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">renderSearchResults()&#123;</div><div class="line">  return (</div><div class="line">    &lt;div id=&quot;search-results&quot;&gt;</div><div class="line">      &#123;this.state.searchResults.map(this.renderPlayer.bind(this))&#125;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>renderPlayer</code> 函数以<code>track</code>类为入参, 通过这个参数我们可以获取<code>key</code>和<code>resolveUrl</code>属性. 如果你之前用过React, 应该明白使用<code>map</code>方法时需要插入一个独一无二的<code>key</code>或者别的React可以识别的标志. 另外两个属性:<code>clientId</code>和<code>resolveUrl</code>是<code>ProgressSoundPlayer</code>需要的. <code>clientId</code>是SoundCloud API的键值, 之前已经定义过, <code>resolveUrl</code>是访问指定音频的唯一的地址. 这和你在SoundCloud网站上访问指定音频的地址是一样的.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">renderPlayer(track)&#123;</div><div class="line">  return (</div><div class="line">    &lt;ProgressSoundPlayer</div><div class="line">      key=&#123;track.id&#125;</div><div class="line">      clientId=&#123;client_id&#125;</div><div class="line">      resolveUrl=&#123;track.permalink_url&#125; /&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后，我们调整为DOM的形式.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var main = document.getElementById(&apos;main&apos;);</div><div class="line">ReactDOM.render(&lt;Main /&gt;, main);</div></pre></td></tr></table></figure>
+<p>这里是<a href="https://github.com/sitepoint-editors/electron-soundcloudplayer/blob/master/src/app.js" target="_blank" rel="external">完整组件功能代码</a>.</p>
+<h3 id="布局应用"><a href="#布局应用" class="headerlink" title="布局应用"></a>布局应用</h3><p>应用的布局是在文件<a href="https://github.com/sitepoint-editors/electron-soundcloudplayer/blob/master/css/style.css" target="_blank" rel="external">css/style.css</a>中.  样式表中包含的每个组件的样式声明(播放按钮,搜索按钮,进度条,和其它我们使用的元素).</p>
+<h3 id="索引文件"><a href="#索引文件" class="headerlink" title="索引文件"></a>索引文件</h3><p>就像前面提到的, 当Electron的<code>main.js</code>文件创建一个新浏览器窗口时, 它就会加载<code>index.html</code>. 这并没有特别的地方, 通常都是HTML文件配合样式表和JavaScript文件来使用.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">  &lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;Electron Soundcloud Player&lt;/title&gt;</div><div class="line">    &lt;link rel=&quot;stylesheet&quot; href=&quot;css/style.css&quot;&gt;</div><div class="line">  &lt;/head&gt;</div><div class="line">  &lt;body&gt;</div><div class="line">    &lt;div id=&quot;main&quot;&gt;&lt;/div&gt;</div><div class="line">    &lt;script src=&quot;js/app.js&quot;&gt;&lt;/script&gt;</div><div class="line">  &lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<h2 id="编译应用"><a href="#编译应用" class="headerlink" title="编译应用"></a>编译应用</h2><p>Electron使用环境，和标准的Node.js应用中没有差异, 它们是相同的使用方法. 这就意味着你可以像这样来使用:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">import fs from &apos;fs&apos;;</div><div class="line"></div><div class="line">const buffer = fs.readFileSync(`$&#123;__dirname&#125;/index.html`);</div><div class="line">console.log(buffer.toString());</div></pre></td></tr></table></figure>
+<p>这样Electron就可以顺利运行了.</p>
+<p>但是因为我们使用了ES6和JSX来实现应用，所以我们并不能真的使用上述特性. 我们能做的，可以用Babel将JSX和ES6代码转换为浏览器(ES5)可识别的代码. 在前面的章节<a href="#addingelectronandotherdependencies">dependencies section</a>, 我们已经安装了工程所必须的包. 因此，你现在只需要执行如下命令来生成主JavaScript文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`npm run compile`</div></pre></td></tr></table></figure>
+<h2 id="运行和打包应用"><a href="#运行和打包应用" class="headerlink" title="运行和打包应用"></a>运行和打包应用</h2><p>你可以在工程的根目录执行 <code>npm start</code> 来运行应用, 但这并不好玩. 你可能只是通过浏览器运行一下玩玩就失去兴趣收工了. 相反我们可以这样，将应用打包成一个文件夹, 文件夹只包含运行应用所必须的文件. 然后，你可以将文件夹制作为压缩包来分发你的应用.</p>
+<p>要打包应用，需要安装electron-packager:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`npm install electron-packager -g`</div></pre></td></tr></table></figure>
+<p>一旦安装成功，你可以到你工程的上一级目录执行如下命令:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">`electron-packager ./soundcloud-player SoundCloudPlayer --version=1.2.4 --platform=linux --out=/home/jim/Desktop --arch=all --ignore=&quot;(node_modules|src)&quot;`</div></pre></td></tr></table></figure>
+<p>对这条命令拆开解释:</p>
+<ul>
+<li><p><code>./soundcloud-player</code>—你的工程目录.</p>
+</li>
+<li><p><code>SoundCloudPlayer</code>—你的应用名称.</p>
+</li>
+<li><p><code>--version=1.2.0</code>—你想使用的Electron版本号. 写作本文时版本号是1.2.0，所以也许你月度本文时，会有更新的版本你可以使用，你就可以修改这里为最新的版本.</p>
+</li>
+<li><p><code>--platform=linux</code>—你想要部署的平台. 我是在Ubuntu上所以这里设置为Linux. 如果你想部署到其它所有平台(Windows, OSX, Linux), 你可以使用<code>--all</code>选项来替代.</p>
+</li>
+<li><p><code>--out=/home/wern/Desktop</code>—输出路径. 生成的安装包的路径.</p>
+</li>
+<li><p><code>--arch=all</code>—处理器架构. 我们指定<code>all</code>意味着32位和64位操作系统都需要编译支持.</p>
+</li>
+<li><p><code>--ignore=&quot;(node_modules|src)&quot;</code>—因为应用要通过Electron和Chrome打包, 所以应用大小会非常大. 为避免大小进一步变大，我们唯一能做的，就是去除我们不需要的文件. 因为我们已经编译成一个JavaScript文件, 所以我们不再需要 <code>node_modules</code> 和 <code>src</code> 目录下的任何文件.</p>
+</li>
+</ul>
+<p>更多关于 electron-packager 你可以参考<a href="https://github.com/electron-userland/electron-packager" target="_blank" rel="external">electron-packager主页</a>. 你可以阅读其别的可用的命令行参数的 <a href="https://github.com/electron-userland/electron-packager/blob/master/usage.txt" target="_blank" rel="external">说明文档</a>.</p>
+<h2 id="接下来要干什么"><a href="#接下来要干什么" class="headerlink" title="接下来要干什么"></a>接下来要干什么</h2><p>本篇我们学着构建了一个简单的Electron应用. 它能工作但还待改善. 如下是一些改善建议:</p>
+<ul>
+<li><p>搜索结果分页显示.</p>
+</li>
+<li><p>用户搜索时自动停止播放音乐的功能.</p>
+</li>
+<li><p>去掉搜索按钮，通过<code>handleTextChange</code>直接在输入时搜索.</p>
+</li>
+<li><p><a href="http://electron.atom.io/docs/v0.36.8/tutorial/application-packaging/" target="_blank" rel="external">将应用打包成asar压缩包</a>, 避免暴露源代码给所有人.</p>
+</li>
+<li><p>如果你想正式的把应用分发出去给全世界, 你就需要给各个平台创建一个安装包(Windows, OSX, and Linux). 这里有个叫做<a href="https://github.com/loopline-systems/electron-builder" target="_blank" rel="external">electron-builder</a>的工具你可以使用.</p>
+</li>
+</ul>
+<p>想获得更多灵感, 查看<a href="http://www.soundnodeapp.com/" target="_blank" rel="external">SoundNode应用</a>—这是一个开源工程，可以支持在各个桌面版系统上使用SoundCloud，如Mac, Windows, and Linux.</p>
+<p>如果你希望更多的了解Electron, 想系统的学习通过web技术来构建桌面应用, 我推荐如下网址:</p>
+<ul>
+<li><p><a href="http://nwjs.io/" target="_blank" rel="external">NW.js</a>—之前知名的node-webkit. 允许你在DOM直接调用node模块. 如果你想找Electron的替代工具, 你可以试一下这个工具.</p>
+</li>
+<li><p><a href="https://www.sitepoint.com/desktop-node-apps-with-electron/" target="_blank" rel="external">使用Electron创建跨平台桌面Node应用</a>—SitePoint最新的教程.</p>
+</li>
+<li><p><a href="https://www.youtube.com/playlist?list=PL1QRvYV-LXn6ESBl7qm1teB1U1CK1B6gv" target="_blank" rel="external">Electron Video教程</a></p>
+</li>
+<li><p><a href="http://electron.atom.io/docs/v0.36.8/" target="_blank" rel="external">Electron Official Docs</a></p>
+</li>
+</ul>
+<h2 id="结尾"><a href="#结尾" class="headerlink" title="结尾"></a>结尾</h2><p>通过本教程，我们学会了如何通过Electron创建了一个流畅和时尚的跨平台应用. 更方便的是，我们是通过已有的web开发技能来实现的. 我们也看到了，对指定系统打包和分发应用是如此的简单.</p>
+<p>非常期待各位留言评论，介绍一下自己通过Electron构建的应用.</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+
+
+
+
+<div class="article-share" id="share">
+
+  <div data-url="http://yoursite.com/2016/08/11/build-player-with-electron-es6/" data-title="使用Electron, React &amp; ES6构建音乐流媒体播放应用 | tinysniper" data-tsina="null" class="share clearfix">
+  </div>
+
+</div>
+</footer>   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/07/08/npm-i-electron/"  title="npm安装electron-prebuilt">
+ <strong>NEXT:</strong><br/> 
+ <span>npm安装electron-prebuilt
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section class="comment">
+	<div class="ds-thread"></div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#关于作者更多的信息可参考"><span class="toc-number">1.</span> <span class="toc-text">关于作者更多的信息可参考</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#纵览我们构建的应用"><span class="toc-number"></span> <span class="toc-text">纵览我们构建的应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加Electron和其它依赖"><span class="toc-number"></span> <span class="toc-text">添加Electron和其它依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#工程结构"><span class="toc-number"></span> <span class="toc-text">工程结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#构建应用"><span class="toc-number"></span> <span class="toc-text">构建应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#音轨组件"><span class="toc-number">1.</span> <span class="toc-text">音轨组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ProgressSoundPlayer组件"><span class="toc-number">2.</span> <span class="toc-text">ProgressSoundPlayer组件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Main主程序"><span class="toc-number">3.</span> <span class="toc-text">Main主程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#布局应用"><span class="toc-number">4.</span> <span class="toc-text">布局应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#索引文件"><span class="toc-number">5.</span> <span class="toc-text">索引文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译应用"><span class="toc-number"></span> <span class="toc-text">编译应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运行和打包应用"><span class="toc-number"></span> <span class="toc-text">运行和打包应用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接下来要干什么"><span class="toc-number"></span> <span class="toc-text">接下来要干什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结尾"><span class="toc-number"></span> <span class="toc-text">结尾</span></a>
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+  
+
+  <div class="rsspart">
+	<a href="null" target="_blank" title="rss">RSS</a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<div class="social-font clearfix">
+		
+		
+		
+		
+		
+	</div>
+		<p class="copyright">Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/A-limon/pacman" target="_blank" title="Pacman">Pacman</a> © 2016 
+		
+		<a href="http://yoursite.com" target="_blank" title="tinysniper">tinysniper</a>
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else
+    {
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      h  = $('article h2')
+      ah = $('article h2'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  if(ah.length==0){
+    t.css('display','none');
+  }else{
+    c.click(function(){
+      ta.css('display', 'block').addClass('fadeIn');
+    });
+    o.click(function(){
+      ta.css('display', 'none');
+    });
+    $(window).scroll(function(){
+      ta.css("top",Math.max(140,320-$(this).scrollTop()));
+    });
+  };
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina');
+  var html = [
+  '<a href="#" class="overlay" id="qrcode"></a>',
+  '<div class="qrcode clearfix"><span>扫描二维码分享到微信朋友圈</span><a class="qrclose" href="#share"></a><strong>Loading...Please wait</strong><img id="qrcode-pic" data-src="http://s.jiathis.com/qrcode.php?url=' + encodedUrl + '"/></div>',
+  '<a href="#textlogo" class="article-back-to-top" title="Top"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="QRcode"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="Weibo"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+  $('.article-share-qrcode').click(function(){
+    var imgSrc = $('#qrcode-pic').attr('data-src');
+    $('#qrcode-pic').attr('src', imgSrc);
+    $('#qrcode-pic').load(function(){
+        $('.qrcode strong').text(' ');
+    });
+  });
+});     
+</script>
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"null"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+  </body>
+</html>
